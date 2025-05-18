@@ -26,59 +26,59 @@ typedef struct{
     int score;
     char user[nameSIZE];
     int checked;
-}USER;
+} USER;
 
 struct stat trr;
 
-int main(int argc,char **argv){
+int main (int argc, char **argv){
 
-    if(argc!=2){
+    if (argc != 2){
         perror("not enough arguments,missing hunt");
         return -1;
     }
 
     TREASURE t;
     char path_tr[pathSIZE];
-    snprintf(path_tr,sizeof(path_tr),"%s/treasure.dat",argv[1]);
-    if(lstat(path_tr,&trr)==-1){
+    snprintf (path_tr, sizeof(path_tr), "%s/treasure.dat", argv[1]);
+    if (lstat(path_tr, &trr) == -1){
         perror("error getting the path");
         return -1;
     }
 
-    int tr=open(path_tr,O_RDONLY,0777);
-    if(tr==-1){
+    int tr = open(path_tr, O_RDONLY, 0777);
+    if (tr == -1){
         perror("errror opening the treasure file");
         return -1;
     }
 
-    USER v[SIZE_CHUNK];
+    USER v[SIZE_CHUNK]= { 0 };
 
-    int cnt=0;
-    while(read(tr,&t,sizeof(t))==sizeof(t)){
-        v[cnt].checked=0;
-        strcpy(v[cnt].user,t.userName);
-        v[cnt].score=t.value;
+    int cnt = 0;
+    while (read(tr, &t, sizeof(t)) == sizeof(t)){
+        v[cnt].checked = 0;
+        strcpy(v[cnt].user, t.userName);
+        v[cnt].score = t.value;
 
-        for(int i=0;i<cnt;i++){
-            if(strcmp(v[i].user,t.userName)==0){
-                v[i].score+=t.value;
-                v[cnt].checked=1;
+        for (int i=0; i<cnt; i++){
+            if (strcmp(v[i].user, t.userName) == 0){
+                v[i].score += t.value;
+                v[cnt].checked = 1;
             }
         }
 
-        if(v[cnt].checked!=1)
+        if (v[cnt].checked != 1)
             cnt++;
 
     }
 
 
-    if(close(tr)==-1){
+    if (close(tr) == -1){
         perror("errror closing the treasure file");
         return -1;
     }
 
-    for(int i=0;i<cnt;i++){
-        printf("Hunt %s: Treasure with user %s has the score %d\n",argv[1],v[i].user,v[i].score);
+    for(int i=0; i<cnt; i++){
+        printf("Treasure with user %s has the score %d\n",v[i].user,v[i].score);
     }
 
     return 0;
