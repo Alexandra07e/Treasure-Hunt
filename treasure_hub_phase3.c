@@ -325,11 +325,9 @@ void start_monitor() {
 
     if (pid == 0) {
         //child process - capatul de scriere - monitor
-
         close(pfd_monitor[0]);
-        dup2(pfd_monitor[1], 1); //redirectionam de la stdout in main
+        dup2(pfd_monitor[1], 1); /
         close(pfd_monitor[1]);
-
 
         struct sigaction sa1;
         sa1.sa_handler = handle_signals;
