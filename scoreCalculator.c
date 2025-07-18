@@ -31,7 +31,6 @@ typedef struct{
 struct stat trr;
 
 int main (int argc, char **argv){
-
     if (argc != 2){
         perror("not enough arguments,missing hunt");
         return -1;
